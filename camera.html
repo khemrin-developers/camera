@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h3>Camera with JavaScript</h3>
+
+<video id="video" width="100%" autoplay playsinline></video>
+<br><br>
+
+<button onclick="openCamera()">Open Camera</button>
+<button onclick="takePhoto()">Take Photo</button>
+<button onclick="savePhoto()">Save Photo</button>
+
+<br><br>
+<canvas id="canvas"></canvas>
+
+<script>
+let video = document.getElementById('video');
+let canvas = document.getElementById('canvas');
+let context = canvas.getContext('2d');
+
+// បើក camera
+function openCamera() {
+    navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" } // back camera phone
+    })
+    .then(stream => {
+        video.srcObject = stream;
+    })
+    .catch(err => {
+        alert("Error: " + err);
+    });
+}
+
+// ថតរូប
+function takePhoto() {
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    context.drawImage(video, 0, 0);
+}
+
+// Save image
+function savePhoto() {
+    let link = document.createElement('a');
+    link.download = 'photo.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+}
+</script>
+
+</body>
+</html>
